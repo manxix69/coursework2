@@ -2,12 +2,12 @@ package ru.manxix69.exam.services;
 
 import org.springframework.stereotype.Service;
 import ru.manxix69.exam.domain.Question;
-import ru.manxix69.exam.exceptions.BadRequestException;
+import ru.manxix69.exam.exceptions.QuestionStorageLessThanRequested;
 
 import java.util.*;
 
 @Service
-public class ExaminerServiceImpl implements ExaminerService{
+public class ExaminerServiceImpl implements ExaminerService {
     private QuestionService questionService;
 
     public ExaminerServiceImpl(QuestionService questionService) {
@@ -17,15 +17,16 @@ public class ExaminerServiceImpl implements ExaminerService{
     @Override
     public Collection<Question> getQuestions(int amount) {
         Set<Question> questions = new HashSet<>();
-//        System.out.println("Set created");
         if (amount > questionService.getAll().size()) {
-//            System.out.println("throw new BadRequestException");
-            throw new BadRequestException("запрошено большее количество вопросов, чем хранится в сервисе!");
+            throw new QuestionStorageLessThanRequested("запрошено большее количество вопросов, чем хранится в сервисе!");
         }
-//        System.out.println("start while");
-        while (questions.size() < amount) {
-            questions.add(questionService.getRandomQuestion(questions));
-        }
+
+            for (int i = 1; i <= amount; i++) {
+//                while (questions.size() <= i) {
+                    questions.add(questionService.getRandomQuestion());
+//                }
+            }
+
         return questions;
     }
 }

@@ -12,14 +12,14 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/exam/test")
 public class TestController {
-    TestService testService;
+    private final TestService testService;
 
     public TestController(TestService testService) {
         this.testService = testService;
     }
 
     @GetMapping
-    public Collection<Question> initilizeQuestions() {
+    public Collection<Question> initializeQuestions() {
         return testService.createQuestions();
     }
 }

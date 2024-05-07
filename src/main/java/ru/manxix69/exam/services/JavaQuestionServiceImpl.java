@@ -6,7 +6,7 @@ import ru.manxix69.exam.domain.Question;
 import java.util.*;
 
 @Service
-public class JavaQuestionServiceImpl implements QuestionService {
+public class JavaQuestionServiceImpl implements JavaQuestionService {
 
     private Set<Question> questions = new HashSet<>();
 
@@ -32,7 +32,7 @@ public class JavaQuestionServiceImpl implements QuestionService {
 
     @Override
     public Collection<Question> getAll() {
-        return questions;
+        return Collections.unmodifiableCollection(questions);
     }
 
     @Override
@@ -52,19 +52,12 @@ public class JavaQuestionServiceImpl implements QuestionService {
     }
 
 
-    public Question getRandomQuestion(Collection<Question> exceptList) {
+    public Question getRandomQuestion() {
         Random random = new Random();
         Question question = null;
-        Collection<Question> questionCollection = new HashSet<>();
-        questionCollection.addAll(questions);
-
-        if (exceptList != null) {
-            questionCollection.removeAll(exceptList);
-        }
-
         int counter = 0;
-        int randomInt = random.nextInt(0, questionCollection.size());
-        for (Question q : questionCollection) {
+        int randomInt = random.nextInt(0, questions.size());
+        for (Question q : questions) {
             if (counter == randomInt) {
                 question = q;
                 break;
