@@ -52,12 +52,17 @@ public class JavaQuestionServiceImpl implements JavaQuestionService {
     }
 
 
-    public Question getRandomQuestion() {
+    public Question getRandomQuestion(Collection<Question> set) {
         Random random = new Random();
         Question question = null;
+        Collection<Question> questionCollection = new HashSet<>();
+        questionCollection.addAll(questions);
+        if (set != null && questionCollection != null) {
+            questionCollection.removeAll(set);
+        }
         int counter = 0;
-        int randomInt = random.nextInt(0, questions.size());
-        for (Question q : questions) {
+        int randomInt = random.nextInt(0, questionCollection.size());
+        for (Question q : questionCollection) {
             if (counter == randomInt) {
                 question = q;
                 break;

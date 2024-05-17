@@ -10,17 +10,21 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.manxix69.exam.domain.Question;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @SpringBootTest
 public class JavaQuestionServiceTests {
 
     private JavaQuestionService javaQuestionService;
     private Question testQuestion;
+    private Question testQuestion2;
 
     @BeforeEach
     public void setUp() {
         javaQuestionService = new JavaQuestionServiceImpl();
         testQuestion = new Question("Вопрос?", "Ответ.");
+        testQuestion2 = new Question("Вопрос1", "Ответ2");
     }
 
     @Test
@@ -69,6 +73,23 @@ public class JavaQuestionServiceTests {
     @Test
     public void getRandomQuestion() {
         javaQuestionService.add(testQuestion);
-        Assertions.assertEquals(javaQuestionService.getRandomQuestion(), testQuestion);
+        Assertions.assertEquals(javaQuestionService.getRandomQuestion(null), testQuestion);
+    }
+    @Test
+    public void getRandomQuestionOne() {
+        javaQuestionService.add(testQuestion);
+        javaQuestionService.add(testQuestion2);
+
+        Collection<Question> set = new HashSet<Question>();
+        set.add(testQuestion2);
+
+        Assertions.assertEquals(javaQuestionService.getRandomQuestion(set), testQuestion);
+    }
+    @Test
+    public void getRandomQuestionAll() {
+        javaQuestionService.add(testQuestion);
+        javaQuestionService.add(testQuestion2);
+
+        Assertions.assertThrows(IllegalArgumentException.class, ()->javaQuestionService.getRandomQuestion(javaQuestionService.getAll()));
     }
 }
