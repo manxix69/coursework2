@@ -21,7 +21,9 @@ public class ExaminerServiceImpl implements ExaminerService {
             throw new QuestionStorageLessThanRequested("запрошено большее количество вопросов, чем хранится в сервисе!");
         }
         for (int i = 1; i <= amount; i++) {
-            questions.add(questionService.getRandomQuestion(questions));
+            while (questions.size() < i) {
+                questions.add(questionService.getRandomQuestion(questions));
+            }
         }
         return questions;
     }
