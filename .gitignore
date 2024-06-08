@@ -6,6 +6,7 @@ out/
 /.idea
 /out
 *.iml
+/target
 
 ### Eclipse ###
 .apt_generated
@@ -31,3 +32,4 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+/target/
