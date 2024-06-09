@@ -3,26 +3,28 @@ package ru.manxix69.exam.services;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import ru.manxix69.exam.domain.Question;
 import ru.manxix69.exam.exceptions.QuestionStorageLessThanRequested;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 public class ExaminerServiceImplTests {
-    @Mock
-    private QuestionService questionService;
+    @Autowired
+    private JavaQuestionService javaQuestionService;
+    @Autowired
+    private MathQuestionService mathQuestionService;
+    @Autowired
     private ExaminerService examinerService;
 
     @BeforeEach
     public void setUp() {
-        examinerService = new ExaminerServiceImpl(questionService);
+        examinerService = new ExaminerServiceImpl(javaQuestionService, mathQuestionService);
     }
 
     @Test
@@ -33,7 +35,13 @@ public class ExaminerServiceImplTests {
         questions.add(new Question("Вопрос1", "Ответ1"));
         questions.add(new Question("Вопрос2", "Ответ2"));
 
-        Mockito.when(questionService.getAll()).thenReturn(questions);
+        javaQuestionService.add(new Question("Вопрос0", "Ответ0"));
+        javaQuestionService.add(new Question("Вопрос1", "Ответ1"));
+        javaQuestionService.add(new Question("Вопрос2", "Ответ2"));
+
         Assertions.assertEquals(examinerService.getQuestions(1).size(),1);
+        Assertions.assertEquals(examinerService.getQuestions(2).size(),2);
     }
+
+
 }

@@ -18,8 +18,12 @@ public class TestController {
         this.testService = testService;
     }
 
-    @GetMapping
-    public Collection<Question> initializeQuestions() {
-        return testService.createQuestions();
+    @GetMapping("/math")
+    public Collection<Question> initializeQuestionsMath() {
+        return testService.createQuestionsMath();
+    }
+    @GetMapping("/java")
+    public Collection<Question> initializeQuestionsJava() {
+        return testService.createQuestionsJava();
     }
 }

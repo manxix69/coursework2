@@ -1,28 +1,31 @@
 package ru.manxix69.exam.services;
 
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.manxix69.exam.domain.Question;
+import ru.manxix69.exam.repository.JavaQuestionRepository;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 @SpringBootTest
 public class JavaQuestionServiceTests {
 
+    @Autowired
     private JavaQuestionService javaQuestionService;
+    @Autowired
+    private JavaQuestionRepository javaQuestionRepository;
+
     private Question testQuestion;
     private Question testQuestion2;
 
     @BeforeEach
     public void setUp() {
-        javaQuestionService = new JavaQuestionServiceImpl();
+        javaQuestionRepository = new JavaQuestionRepository();
+        javaQuestionService = new JavaQuestionServiceImpl(javaQuestionRepository);
         testQuestion = new Question("Вопрос?", "Ответ.");
         testQuestion2 = new Question("Вопрос1", "Ответ2");
     }

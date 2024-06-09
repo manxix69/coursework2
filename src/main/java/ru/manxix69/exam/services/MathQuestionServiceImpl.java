@@ -1,11 +1,23 @@
 package ru.manxix69.exam.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 import ru.manxix69.exam.domain.Question;
+import ru.manxix69.exam.repository.MathQuestionRepository;
+import ru.manxix69.exam.repository.QuestionRepository;
 
 import java.util.*;
-
+@Service
+@Qualifier("mathQuestionServiceImpl")
 public class MathQuestionServiceImpl implements MathQuestionService{
-    private Set<Question> questions = new HashSet<>();
+
+    private QuestionRepository questionRepository;
+
+    public MathQuestionServiceImpl(@Qualifier("mathQuestionRepository") QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
+    }
+
     @Override
     public Question add(String question, String answer) {
         return add(new Question(question, answer));
@@ -13,7 +25,7 @@ public class MathQuestionServiceImpl implements MathQuestionService{
 
     @Override
     public Question add(Question question) {
-        questions.add(question);
+        questionRepository.addQuestion(question);
         return question;
     }
 
@@ -29,13 +41,13 @@ public class MathQuestionServiceImpl implements MathQuestionService{
 
     @Override
     public Question remove(Question question) {
-        questions.remove(question);
+        questionRepository.removeQuestion(question);
         return question;
     }
 
     @Override
     public Collection<Question> getAll() {
-        return Collections.unmodifiableCollection(questions);
+        return questionRepository.getAll();
     }
 
     @Override
@@ -43,7 +55,7 @@ public class MathQuestionServiceImpl implements MathQuestionService{
         Random random = new Random();
         Question question = null;
         Collection<Question> questionCollection = new HashSet<>();
-        questionCollection.addAll(questions);
+        questionCollection.addAll(questionRepository.getAll());
         if (set != null && questionCollection != null) {
             questionCollection.removeAll(set);
         }
@@ -61,8 +73,9 @@ public class MathQuestionServiceImpl implements MathQuestionService{
     @Override
     public Question findQuestion(String question, String answer) {
         Question findQuestion = null;
-        for (Question q : questions) {
-            if (q.getQuestion().equals(question) && q.getAnswer().equals(answer)) {
+        for (Question q : questionRepository.getAll()) {
+            if (q.getQuestion().equals(question)
+                    && q.getAnswer().equals(answer)) {
                 findQuestion = q;
             }
         }

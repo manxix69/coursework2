@@ -6,16 +6,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.manxix69.exam.domain.Question;
+import ru.manxix69.exam.services.MathQuestionService;
 import ru.manxix69.exam.services.QuestionService;
 
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/exam/java")
-public class JavaQuestionController {
+@RequestMapping("/exam/math")
+public class MathQuestionController {
+
     private final QuestionService questionService;
 
-    JavaQuestionController(@Qualifier("javaQuestionServiceImpl") QuestionService questionService) {
+    MathQuestionController(@Qualifier("mathQuestionServiceImpl") QuestionService questionService ) {
         this.questionService = questionService;
     }
 

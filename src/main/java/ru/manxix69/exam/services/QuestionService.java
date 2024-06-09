@@ -1,10 +1,12 @@
 package ru.manxix69.exam.services;
 
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Primary;
 import ru.manxix69.exam.domain.Question;
 
 import java.util.Collection;
 import java.util.Set;
-
+@Primary
 public interface QuestionService {
     Question add(String question, String answer);
 
