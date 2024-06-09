@@ -67,14 +67,7 @@ public class MathQuestionServiceTests {
 
     /*@Test
     public void getRandomQuestion() {
-        Collection<Question> questions = new HashSet<>();
-        questions.add(testQuestion);
-        questions.add(testQuestion2);
-        mathQuestionService.add(testQuestion);
-        mathQuestionService.add(testQuestion2);
-
-        questionRepository = mathQuestionRepository;
-        Mockito.when(questionRepository.getAll()).thenReturn(questions);
-        Assertions.assertEquals(questions.size(), mathQuestionService.getRandomQuestion(questions));
+        Mockito.when()
+        mathQuestionService.getRandomQuestion(new HashSet<>());
     }*/
 }

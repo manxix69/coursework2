@@ -12,13 +12,9 @@ import java.util.*;
 public class ExaminerServiceImpl implements ExaminerService {
 
     private QuestionService javaQuestionService;
-//    private QuestionService mathQuestionService;
 
-    public ExaminerServiceImpl(@Qualifier("javaQuestionServiceImpl") QuestionService javaQuestionService/*,
-                               @Qualifier("mathQuestionServiceImpl") QuestionService mathQuestionService*/
-    ) {
+    public ExaminerServiceImpl(@Qualifier("javaQuestionServiceImpl") QuestionService javaQuestionService) {
         this.javaQuestionService = javaQuestionService;
-//        this.mathQuestionService = mathQuestionService;
     }
 
     @Override
@@ -30,7 +26,6 @@ public class ExaminerServiceImpl implements ExaminerService {
         } else if (amount > (javaQuestionService.getAll().size() /*+ mathQuestionService.getAll().size()*/) / 2) {
             //если запрос больше чем половина всех вопросов по яве и математике то забираем все вопросы и удаляем случайно
             questions.addAll(javaQuestionService.getAll());
-//            questions.addAll(mathQuestionService.getAll());
 
             while (questions.size() > amount) {
                 Random random = new Random();
@@ -49,9 +44,6 @@ public class ExaminerServiceImpl implements ExaminerService {
             for (int i = 1; i <= amount; i++) {
                 while (questions.size() < i) {
                     questions.add(javaQuestionService.getRandomQuestion(questions));
-                    /*if (questions.size() < i) {
-                        questions.add(mathQuestionService.getRandomQuestion(questions));
-                    }*/
                 }
             }
         }
