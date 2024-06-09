@@ -1,10 +1,8 @@
 package ru.manxix69.exam.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.manxix69.exam.domain.Question;
-import ru.manxix69.exam.repository.MathQuestionRepository;
 import ru.manxix69.exam.repository.QuestionRepository;
 
 import java.util.*;
@@ -14,7 +12,7 @@ public class MathQuestionServiceImpl implements MathQuestionService{
 
     private QuestionRepository questionRepository;
 
-    public MathQuestionServiceImpl(@Qualifier("mathQuestionRepository") QuestionRepository questionRepository) {
+    public MathQuestionServiceImpl(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }
 
@@ -52,20 +50,16 @@ public class MathQuestionServiceImpl implements MathQuestionService{
 
     @Override
     public Question getRandomQuestion(Collection<Question> set) {
-        Random random = new Random();
+        Random randomAction = new Random();
+        Random randomInteger = new Random();
         Question question = null;
-        Collection<Question> questionCollection = new HashSet<>();
-        questionCollection.addAll(questionRepository.getAll());
-        if (set != null && questionCollection != null) {
-            questionCollection.removeAll(set);
-        }
-        int counter = 0;
-        int randomInt = random.nextInt(0, questionCollection.size());
-        for (Question q : questionCollection) {
-            if (counter == randomInt) {
-                question = q;
-                break;
-            }
+        int action = randomAction.nextInt(0, 4);
+        int intNumber = randomInteger.nextInt(1, 100);
+        switch (action) {
+            case 0 -> question = new Question("Сколько будет " + intNumber + "+" + intNumber, (intNumber + intNumber) + "");
+            case 1 -> question = new Question("Сколько будет " + intNumber + "-" + intNumber, (intNumber - intNumber) + "");
+            case 2 -> question = new Question("Сколько будет " + intNumber + "*" + intNumber, (intNumber * intNumber) + "");
+            case 3 -> question = new Question("Сколько будет " + intNumber + "/" + intNumber, (intNumber / intNumber) + "");
         }
         return question;
     }

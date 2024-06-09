@@ -9,9 +9,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.manxix69.exam.domain.Question;
-import ru.manxix69.exam.repository.MathQuestionRepository;
+import ru.manxix69.exam.repository.JavaQuestionRepository;
 import ru.manxix69.exam.repository.QuestionRepository;
 
 import java.util.Collection;
@@ -23,8 +22,10 @@ public class MathQuestionServiceTests {
 
     @Autowired
     private MathQuestionService mathQuestionService;
+//    @Mock
+//    private MathQuestionRepository mathQuestionRepository;
     @Mock
-    private MathQuestionRepository mathQuestionRepository;
+    private JavaQuestionRepository javaQuestionRepository;
     @Mock
     QuestionRepository questionRepository;
     private Question testQuestion;
@@ -32,7 +33,8 @@ public class MathQuestionServiceTests {
 
     @BeforeEach
     public void setUp() {
-        mathQuestionService = new MathQuestionServiceImpl(mathQuestionRepository);
+//        mathQuestionService = new MathQuestionServiceImpl(mathQuestionRepository);
+        mathQuestionService = new MathQuestionServiceImpl(javaQuestionRepository);
         testQuestion = new Question("Вопрос?", "Ответ.");
         testQuestion2 = new Question("Вопрос1", "Ответ2");
     }
@@ -44,7 +46,7 @@ public class MathQuestionServiceTests {
         questions.add(question);
         mathQuestionService.add(question.getQuestion(), question.getAnswer());
 
-        Mockito.when(mathQuestionRepository.getAll()).thenReturn(questions);
+        Mockito.when(javaQuestionRepository.getAll()).thenReturn(questions);
         Assertions.assertEquals(questions.size(), mathQuestionService.getAll().size());
     }
 
@@ -56,7 +58,7 @@ public class MathQuestionServiceTests {
         mathQuestionService.add(testQuestion);
         mathQuestionService.add(testQuestion2);
 
-        Mockito.when(mathQuestionRepository.getAll()).thenReturn(questions);
+        Mockito.when(javaQuestionRepository.getAll()).thenReturn(questions);
         Assertions.assertEquals(questions.size(), mathQuestionService.getAll().size());
 
         Assertions.assertNull(mathQuestionService.remove("task1", "answer1"));

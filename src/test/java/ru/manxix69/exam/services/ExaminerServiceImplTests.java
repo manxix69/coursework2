@@ -17,14 +17,14 @@ import java.util.Set;
 public class ExaminerServiceImplTests {
     @Autowired
     private JavaQuestionService javaQuestionService;
-    @Autowired
-    private MathQuestionService mathQuestionService;
+//    @Autowired
+//    private MathQuestionService mathQuestionService;
     @Autowired
     private ExaminerService examinerService;
 
     @BeforeEach
     public void setUp() {
-        examinerService = new ExaminerServiceImpl(javaQuestionService, mathQuestionService);
+        examinerService = new ExaminerServiceImpl(javaQuestionService/*, mathQuestionService*/);
     }
 
     @Test

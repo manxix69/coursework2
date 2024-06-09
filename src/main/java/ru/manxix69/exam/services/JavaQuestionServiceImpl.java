@@ -1,11 +1,8 @@
 package ru.manxix69.exam.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.manxix69.exam.domain.Question;
-import ru.manxix69.exam.repository.JavaQuestionRepository;
-import ru.manxix69.exam.repository.MathQuestionRepository;
 import ru.manxix69.exam.repository.QuestionRepository;
 
 import java.util.*;
