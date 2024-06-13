@@ -1,10 +1,11 @@
 package ru.manxix69.exam.services;
 
-import ru.manxix69.exam.domain.Question;
+import org.springframework.context.annotation.Primary;
+import ru.manxix69.exam.model.Question;
 
 import java.util.Collection;
-import java.util.Set;
 
+@Primary
 public interface QuestionService {
     Question add(String question, String answer);
 
@@ -14,7 +15,7 @@ public interface QuestionService {
 
     Collection<Question> getAll();
 
-    Question getRandomQuestion(Collection<Question> questionSet);
+    Question getRandomQuestion();
 
     Question findQuestion(String question, String answer);
 

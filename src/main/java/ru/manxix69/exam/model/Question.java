@@ -1,8 +1,5 @@
-package ru.manxix69.exam.domain;
+package ru.manxix69.exam.model;
 
-import ru.manxix69.exam.services.QuestionService;
-
-import java.util.Collection;
 import java.util.Objects;
 
 public class Question {
