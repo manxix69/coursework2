@@ -2,7 +2,8 @@ package ru.manxix69.exam.services;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.manxix69.exam.domain.Question;
+import ru.manxix69.exam.exceptions.QuestionRepositoryIsEmptyException;
+import ru.manxix69.exam.model.Question;
 import ru.manxix69.exam.repository.QuestionRepository;
 
 import java.util.*;
@@ -51,7 +52,8 @@ public class JavaQuestionServiceImpl implements JavaQuestionService {
     public Question findQuestion(String question, String answer) {
         Question findQuestion = null;
         for (Question q : questionRepository.getAll()) {
-            if (q.equals(q)) {
+            if (q.getQuestion().equals(question)
+                    && q.getAnswer().equals(answer)) {
                 findQuestion = q;
             }
         }
@@ -59,22 +61,21 @@ public class JavaQuestionServiceImpl implements JavaQuestionService {
     }
 
 
-    public Question getRandomQuestion(Collection<Question> set) {
+    public Question getRandomQuestion() {
+        if (questionRepository.getAll().size() == 0) {
+            throw new QuestionRepositoryIsEmptyException("В репозитории отсутствуют вопросы для генерации!");
+        }
         Random random = new Random();
         Question question = null;
-        Collection<Question> questionCollection = new HashSet<>();
-        questionCollection.addAll(questionRepository.getAll());
-        if (set != null
-                && questionCollection != null) {
-            questionCollection.removeAll(set);
-        }
+
         int counter = 0;
-        int randomInt = random.nextInt(0, questionCollection.size());
-        for (Question q : questionCollection) {
+        int randomInt = random.nextInt(0, questionRepository.getAll().size());
+        for (Question q : questionRepository.getAll()) {
             if (counter == randomInt) {
                 question = q;
                 break;
             }
+            counter++;
         }
         return question;
     }

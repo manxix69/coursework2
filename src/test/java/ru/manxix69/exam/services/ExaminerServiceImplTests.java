@@ -3,12 +3,10 @@ package ru.manxix69.exam.services;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.manxix69.exam.domain.Question;
-import ru.manxix69.exam.exceptions.QuestionStorageLessThanRequested;
+import ru.manxix69.exam.model.Question;
+import ru.manxix69.exam.exceptions.QuestionStorageLessThanRequestedException;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -17,19 +15,17 @@ import java.util.Set;
 public class ExaminerServiceImplTests {
     @Autowired
     private JavaQuestionService javaQuestionService;
-//    @Autowired
-//    private MathQuestionService mathQuestionService;
     @Autowired
     private ExaminerService examinerService;
 
     @BeforeEach
     public void setUp() {
-        examinerService = new ExaminerServiceImpl(javaQuestionService/*, mathQuestionService*/);
+        examinerService = new ExaminerServiceImpl(javaQuestionService);
     }
 
     @Test
     public void getQuestions() {
-        Assertions.assertThrows(QuestionStorageLessThanRequested.class, () -> examinerService.getQuestions(10));
+        Assertions.assertThrows(QuestionStorageLessThanRequestedException.class, () -> examinerService.getQuestions(10));
         Set<Question> questions = new HashSet<>();
         questions.add(new Question("Вопрос0", "Ответ0"));
         questions.add(new Question("Вопрос1", "Ответ1"));

@@ -2,7 +2,7 @@ package ru.manxix69.exam.services;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.manxix69.exam.domain.Question;
+import ru.manxix69.exam.model.Question;
 
 import java.util.Collection;
 
@@ -11,8 +11,8 @@ public class TestServiceImpl implements TestService {
     private QuestionService javaQuestionService;
     private QuestionService mathQuestionService;
 
-    public TestServiceImpl( @Qualifier("javaQuestionServiceImpl") QuestionService javaQuestionService
-                            ,@Qualifier("mathQuestionServiceImpl") QuestionService mathQuestionService) {
+    public TestServiceImpl(@Qualifier("javaQuestionServiceImpl") QuestionService javaQuestionService
+            , @Qualifier("mathQuestionServiceImpl") QuestionService mathQuestionService) {
         this.javaQuestionService = javaQuestionService;
     }
 

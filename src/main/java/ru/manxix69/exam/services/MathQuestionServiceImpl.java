@@ -1,19 +1,26 @@
 package ru.manxix69.exam.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
-import ru.manxix69.exam.domain.Question;
+import ru.manxix69.exam.model.Question;
+import ru.manxix69.exam.model.RandomInteger;
 import ru.manxix69.exam.repository.QuestionRepository;
 
 import java.util.*;
 @Service
 @Qualifier("mathQuestionServiceImpl")
 public class MathQuestionServiceImpl implements MathQuestionService{
-
+    @Autowired
     private QuestionRepository questionRepository;
 
-    public MathQuestionServiceImpl(QuestionRepository questionRepository) {
+    @Autowired
+    private RandomInteger randomInteger;
+
+    public MathQuestionServiceImpl(QuestionRepository questionRepository, @Qualifier("randomInteger") RandomInteger randomInteger) {
         this.questionRepository = questionRepository;
+        this.randomInteger = randomInteger;
     }
 
     @Override
@@ -49,11 +56,9 @@ public class MathQuestionServiceImpl implements MathQuestionService{
     }
 
     @Override
-    public Question getRandomQuestion(Collection<Question> set) {
-        Random randomAction = new Random();
-        Random randomInteger = new Random();
+    public Question getRandomQuestion() {
         Question question = null;
-        int action = randomAction.nextInt(0, 4);
+        int action = randomInteger.nextInt(0, 4);
         int intNumber = randomInteger.nextInt(1, 100);
         switch (action) {
             case 0 -> question = new Question("Сколько будет " + intNumber + "+" + intNumber, (intNumber + intNumber) + "");
@@ -68,9 +73,9 @@ public class MathQuestionServiceImpl implements MathQuestionService{
     public Question findQuestion(String question, String answer) {
         Question findQuestion = null;
         for (Question q : questionRepository.getAll()) {
-            if (q.getQuestion().equals(question)
-                    && q.getAnswer().equals(answer)) {
+            if (question.equals(q.getQuestion()) && answer.equals(q.getAnswer())) {
                 findQuestion = q;
+                break;
             }
         }
         return findQuestion;

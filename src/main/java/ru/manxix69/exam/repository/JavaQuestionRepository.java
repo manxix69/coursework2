@@ -1,14 +1,10 @@
 package ru.manxix69.exam.repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
-import ru.manxix69.exam.domain.Question;
-import ru.manxix69.exam.exceptions.QuestionExistsIntoRepositoryExcepton;
-import ru.manxix69.exam.exceptions.QuestionNotExistsIntoRepositoryExcepton;
+import ru.manxix69.exam.model.Question;
+import ru.manxix69.exam.exceptions.QuestionExistsIntoRepositoryException;
+import ru.manxix69.exam.exceptions.QuestionNotExistsIntoRepositoryException;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -24,7 +20,7 @@ public class JavaQuestionRepository implements QuestionRepository{
     @Override
     public Question addQuestion(Question question) {
         if (questions.contains(question)){
-            throw new QuestionExistsIntoRepositoryExcepton("Вопрос уже существует в хранилище!");
+            throw new QuestionExistsIntoRepositoryException("Вопрос уже существует в хранилище!");
         } else {
             questions.add(question);
             return question;
@@ -33,7 +29,7 @@ public class JavaQuestionRepository implements QuestionRepository{
     @Override
     public Question removeQuestion(Question question) {
         if (!questions.contains(question)){
-            throw new QuestionNotExistsIntoRepositoryExcepton("Вопрос отсутствует в хранилище!");
+            throw new QuestionNotExistsIntoRepositoryException("Вопрос отсутствует в хранилище!");
         } else {
             questions.remove(question);
             return question;

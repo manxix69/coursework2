@@ -9,7 +9,9 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.manxix69.exam.domain.Question;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import ru.manxix69.exam.model.Question;
+import ru.manxix69.exam.model.RandomInteger;
 import ru.manxix69.exam.repository.JavaQuestionRepository;
 import ru.manxix69.exam.repository.QuestionRepository;
 
@@ -22,19 +24,19 @@ public class MathQuestionServiceTests {
 
     @Autowired
     private MathQuestionService mathQuestionService;
-//    @Mock
-//    private MathQuestionRepository mathQuestionRepository;
+    @MockBean
+    private RandomInteger randomInteger;
+
     @Mock
     private JavaQuestionRepository javaQuestionRepository;
     @Mock
-    QuestionRepository questionRepository;
+    private QuestionRepository questionRepository;
     private Question testQuestion;
     private Question testQuestion2;
 
     @BeforeEach
     public void setUp() {
-//        mathQuestionService = new MathQuestionServiceImpl(mathQuestionRepository);
-        mathQuestionService = new MathQuestionServiceImpl(javaQuestionRepository);
+        mathQuestionService = new MathQuestionServiceImpl(javaQuestionRepository, randomInteger);
         testQuestion = new Question("Вопрос?", "Ответ.");
         testQuestion2 = new Question("Вопрос1", "Ответ2");
     }
@@ -47,6 +49,7 @@ public class MathQuestionServiceTests {
         mathQuestionService.add(question.getQuestion(), question.getAnswer());
 
         Mockito.when(javaQuestionRepository.getAll()).thenReturn(questions);
+        Assertions.assertNotNull(mathQuestionService.findQuestion(question.getQuestion(), question.getAnswer()));
         Assertions.assertEquals(questions.size(), mathQuestionService.getAll().size());
     }
 
@@ -65,9 +68,36 @@ public class MathQuestionServiceTests {
         Assertions.assertEquals(testQuestion, mathQuestionService.remove(testQuestion.getQuestion(), testQuestion.getAnswer()));
     }
 
-    /*@Test
+    @Test
     public void getRandomQuestion() {
-        Mockito.when()
-        mathQuestionService.getRandomQuestion(new HashSet<>());
-    }*/
+        Question question = null;
+
+        Mockito.when(randomInteger.nextInt(0, 4)).thenReturn(0);
+        Mockito.when(randomInteger.nextInt(1, 100)).thenReturn(1);
+        question = new Question("Сколько будет " + 1 + "+" + 1, (1 + 1) + "");
+        Assertions.assertEquals(question, mathQuestionService.getRandomQuestion());
+
+        Mockito.when(randomInteger.nextInt(0, 4)).thenReturn(1);
+        Mockito.when(randomInteger.nextInt(1, 100)).thenReturn(2);
+        question = new Question("Сколько будет " + 2 + "-" + 2, (2 - 2) + "");
+        Assertions.assertEquals(question, mathQuestionService.getRandomQuestion());
+
+        Mockito.when(randomInteger.nextInt(0, 4)).thenReturn(2);
+        Mockito.when(randomInteger.nextInt(1, 100)).thenReturn(3);
+        question = new Question("Сколько будет " + 3 + "*" + 3, (3 * 3) + "");
+        Assertions.assertEquals(question, mathQuestionService.getRandomQuestion());
+
+        Mockito.when(randomInteger.nextInt(0, 4)).thenReturn(3);
+        Mockito.when(randomInteger.nextInt(1, 100)).thenReturn(4);
+        question = new Question("Сколько будет " + 4 + "/" + 4, (4 / 4) + "");
+        Assertions.assertEquals(question, mathQuestionService.getRandomQuestion());
+
+    }
+
+    @Test
+    public void shouldBoNotFindQuestion() {
+        questionRepository.addQuestion(testQuestion);
+        Assertions.assertNull(mathQuestionService.findQuestion(testQuestion.getQuestion(), testQuestion2.getAnswer()));
+        Assertions.assertNull(mathQuestionService.findQuestion(testQuestion2.getQuestion(), testQuestion.getAnswer()));
+    }
 }

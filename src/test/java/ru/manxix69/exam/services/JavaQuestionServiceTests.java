@@ -5,7 +5,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.manxix69.exam.domain.Question;
+import ru.manxix69.exam.exceptions.QuestionExistsIntoRepositoryException;
+import ru.manxix69.exam.exceptions.QuestionNotExistsIntoRepositoryException;
+import ru.manxix69.exam.exceptions.QuestionRepositoryIsEmptyException;
+import ru.manxix69.exam.model.Question;
 import ru.manxix69.exam.repository.JavaQuestionRepository;
 
 import java.util.Collection;
@@ -74,25 +77,30 @@ public class JavaQuestionServiceTests {
     }
 
     @Test
+    public void tryFindQuestionWithOtherAnswerOrQuestion() {
+        javaQuestionService.add(testQuestion);
+        Assertions.assertNull(javaQuestionService.findQuestion(testQuestion.getQuestion(), testQuestion2.getAnswer() ));
+        Assertions.assertNull(javaQuestionService.findQuestion(testQuestion2.getQuestion(), testQuestion.getAnswer() ));
+    }
+
+    @Test
     public void getRandomQuestion() {
+        Assertions.assertThrows(QuestionRepositoryIsEmptyException.class, ()->javaQuestionService.getRandomQuestion());
         javaQuestionService.add(testQuestion);
-        Assertions.assertEquals(javaQuestionService.getRandomQuestion(null), testQuestion);
+        Assertions.assertEquals(javaQuestionService.getRandomQuestion(), testQuestion);
+        javaQuestionService.add(testQuestion2);
+        Assertions.assertNotNull(javaQuestionService.getRandomQuestion().toString());
+
     }
     @Test
-    public void getRandomQuestionOne() {
+    public void shouldBeQuestionExistsIntoRepositoryException() {
         javaQuestionService.add(testQuestion);
-        javaQuestionService.add(testQuestion2);
-
-        Collection<Question> set = new HashSet<Question>();
-        set.add(testQuestion2);
-
-        Assertions.assertEquals(javaQuestionService.getRandomQuestion(set), testQuestion);
+        Assertions.assertThrows(QuestionExistsIntoRepositoryException.class, ()->javaQuestionService.add(testQuestion));
     }
+
     @Test
-    public void getRandomQuestionAll() {
-        javaQuestionService.add(testQuestion);
-        javaQuestionService.add(testQuestion2);
-
-        Assertions.assertThrows(IllegalArgumentException.class, ()->javaQuestionService.getRandomQuestion(javaQuestionService.getAll()));
+    public void shouldBeQuestionNotExistsIntoRepositoryException() {
+        Assertions.assertThrows(QuestionNotExistsIntoRepositoryException.class, ()->javaQuestionService.remove(testQuestion));
     }
+
 }

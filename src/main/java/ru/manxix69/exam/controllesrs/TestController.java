@@ -4,7 +4,7 @@ package ru.manxix69.exam.controllesrs;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.manxix69.exam.domain.Question;
+import ru.manxix69.exam.model.Question;
 import ru.manxix69.exam.services.TestService;
 
 import java.util.Collection;
